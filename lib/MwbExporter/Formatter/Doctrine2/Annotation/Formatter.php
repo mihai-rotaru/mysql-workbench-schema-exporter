@@ -32,27 +32,29 @@ use MwbExporter\Model\Base;
 
 class Formatter extends BaseFormatter
 {
-    const CFG_ANNOTATION_PREFIX              = 'useAnnotationPrefix';
-    const CFG_REPOSITORY_NAMESPACE           = 'repositoryNamespace';
-    const CFG_AUTOMATIC_REPOSITORY           = 'useAutomaticRepository';
-    const CFG_SKIP_GETTER_SETTER             = 'skipGetterAndSetter';
-    const CFG_GENERATE_ENTITY_SERIALIZATION  = 'generateEntitySerialization';
-    const CFG_QUOTE_IDENTIFIER               = 'quoteIdentifier';
+    const CFG_ANNOTATION_PREFIX                 = 'useAnnotationPrefix';
+    const CFG_REPOSITORY_NAMESPACE              = 'repositoryNamespace';
+    const CFG_AUTOMATIC_REPOSITORY              = 'useAutomaticRepository';
+    const CFG_SKIP_GETTER_SETTER                = 'skipGetterAndSetter';
+    const CFG_GENERATE_ENTITY_SERIALIZATION     = 'generateEntitySerialization';
+    const CFG_QUOTE_IDENTIFIER                  = 'quoteIdentifier';
+    const CFG_GENERATE_CONSTRUCTOR_INITIALIZER  = 'generateConstructorInitializer';
 
     protected function init()
     {
         $this->setDatatypeConverter(new DatatypeConverter());
         $this->addConfigurations(array(
-            static::CFG_INDENTATION                   => 4,
-            static::CFG_FILENAME                      => '%entity%.%extension%',
-            static::CFG_ANNOTATION_PREFIX             => 'ORM\\',
-            static::CFG_BUNDLE_NAMESPACE              => '',
-            static::CFG_ENTITY_NAMESPACE              => '',
-            static::CFG_REPOSITORY_NAMESPACE          => '',
-            static::CFG_AUTOMATIC_REPOSITORY          => true,
-            static::CFG_SKIP_GETTER_SETTER            => false,
-            static::CFG_GENERATE_ENTITY_SERIALIZATION => true,
-            static::CFG_QUOTE_IDENTIFIER              => false,
+            static::CFG_INDENTATION                       => 4,
+            static::CFG_FILENAME                          => '%entity%.%extension%',
+            static::CFG_ANNOTATION_PREFIX                 => 'ORM\\',
+            static::CFG_BUNDLE_NAMESPACE                  => '',
+            static::CFG_ENTITY_NAMESPACE                  => '',
+            static::CFG_REPOSITORY_NAMESPACE              => '',
+            static::CFG_AUTOMATIC_REPOSITORY              => true,
+            static::CFG_SKIP_GETTER_SETTER                => false,
+            static::CFG_GENERATE_ENTITY_SERIALIZATION     => true,
+            static::CFG_QUOTE_IDENTIFIER                  => false,
+            static::CFG_GENERATE_CONSTRUCTOR_INITIALIZER  => false,
         ));
     }
 

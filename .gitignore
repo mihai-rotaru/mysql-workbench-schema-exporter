@@ -6,3 +6,4 @@ example/result/
 *.zip
 *.sh
 *.7z
+tests/temp/

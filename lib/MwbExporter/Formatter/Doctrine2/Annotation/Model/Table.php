@@ -256,8 +256,30 @@ class Table extends BaseTable
     public function writeConstructor(WriterInterface $writer)
     {
         $writer
-            ->write('public function __construct()')
+            ->write('/**')
+            ->write(' * Constructor')
+            ->write(' *')
+            ->write(' * @param array $params')
+            ->write(' */')
+            ->write('public function __construct($params=null)')
             ->write('{')
+            ->indent()
+            ->writeCallback(function(WriterInterface $writer, Table $_this = null) {
+                $generateConstructorInitializer = $this->getDocument()->getConfig()->get(Formatter::CFG_GENERATE_CONSTRUCTOR_INITIALIZER);
+                if($generateConstructorInitializer) {
+                    $writer->write('foreach ($params as $key => $value) {');
+                    $writer->indent();
+                        $writer->write('if(property_exists($this, $key)) {');
+                        $writer->indent();
+                            $writer->write('$this->{$key} = $value;');
+                            $writer->outdent();
+                        $writer->write('}');
+                        $writer->outdent();
+                    $writer->write('}');
+                    }
+                }
+            )
+            ->outdent()
             ->indent()
                 ->writeCallback(function(WriterInterface $writer, Table $_this = null) {
                     $_this->getColumns()->writeArrayCollections($writer);

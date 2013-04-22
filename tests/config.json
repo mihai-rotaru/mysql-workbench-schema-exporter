@@ -1,0 +1,19 @@
+{
+    "export": "doctrine2-annotation",
+    "zip": false,
+    "dir": "temp",
+    "params": {
+        "backupExistingFile": true,
+        "skipPluralNameChecking": false,
+        "enhanceManyToManyDetection": false,
+        "bundleNamespace": "",
+        "entityNamespace": "Entities",
+        "repositoryNamespace": "",
+        "useAnnotationPrefix": "",
+        "useAutomaticRepository": false,
+        "indentation": 4,
+        "filename": "%entity%.%extension%",
+        "quoteIdentifier": false,
+        "generateConstructorInitializer": true
+    }
+}
