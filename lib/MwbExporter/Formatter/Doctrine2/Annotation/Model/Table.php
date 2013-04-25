@@ -267,15 +267,19 @@ class Table extends BaseTable
             ->writeCallback(function(WriterInterface $writer, Table $_this = null) {
                 $generateConstructorInitializer = $this->getDocument()->getConfig()->get(Formatter::CFG_GENERATE_CONSTRUCTOR_INITIALIZER);
                 if($generateConstructorInitializer) {
-                    $writer->write('foreach ($params as $key => $value) {');
-                    $writer->indent();
-                        $writer->write('if(property_exists($this, $key)) {');
+                        $writer->write('if($params != null) {');
                         $writer->indent();
-                            $writer->write('$this->{$key} = $value;');
+                            $writer->write('foreach ($params as $key => $value) {');
+                            $writer->indent();
+                                $writer->write('if(property_exists($this, $key)) {');
+                                $writer->indent();
+                                    $writer->write('$this->{$key} = $value;');
+                                    $writer->outdent();
+                                $writer->write('}');
+                                $writer->outdent();
+                            $writer->write('}');
                             $writer->outdent();
                         $writer->write('}');
-                        $writer->outdent();
-                    $writer->write('}');
                     }
                 }
             )
