@@ -7,3 +7,4 @@ example/result/
 *.sh
 *.7z
 tests/temp/
+*.bak

@@ -28,7 +28,7 @@
 namespace MwbExporter\Formatter\Doctrine2\Yaml\Model;
 
 use MwbExporter\Formatter\Doctrine2\Model\Table as BaseTable;
-use MwbExporter\Formatter\Doctrine2\Formatter;
+use MwbExporter\Formatter\Doctrine2\Yaml\Formatter;
 use MwbExporter\Writer\WriterInterface;
 use MwbExporter\Object\YAML;
 use MwbExporter\Helper\Pluralizer;
@@ -37,17 +37,21 @@ class Table extends BaseTable
 {
     public function writeTable(WriterInterface $writer)
     {
-        if (!$this->isExternal()) {
-            $writer
-                ->open($this->getTableFileName())
-                ->write($this->asYAML())
-                ->close()
-            ;
+        switch (true) {
+            case ($this->isExternal()): 
+                return self::WRITE_EXTERNAL;
 
-            return self::WRITE_OK;
+            case ($this->isManyToMany()):
+                return self::WRITE_M2M;
+
+            default:
+                $writer
+                    ->open($this->getTableFileName())
+                    ->write($this->asYAML())
+                    ->close()
+                ;
+                return self::WRITE_OK;
         }
-
-        return self::WRITE_EXTERNAL;
     }
 
     public function asYAML()
@@ -57,6 +61,12 @@ class Table extends BaseTable
             'type' => 'entity',
             'table' => $this->getRawTableName(), 
         );
+        if ($this->getDocument()->getConfig()->get(Formatter::CFG_AUTOMATIC_REPOSITORY)) {
+            if ($repositoryNamespace = $this->getDocument()->getConfig()->get(Formatter::CFG_REPOSITORY_NAMESPACE)) {
+                $repositoryNamespace .= '\\';
+            }
+            $values['repositoryClass'] = $repositoryNamespace.$this->getModelName().'Repository';
+        }
         // indices
         if (count($this->getIndexes())) {
             $values['indexes'] = array();
@@ -108,7 +118,7 @@ class Table extends BaseTable
                 'cascade'      => $formatter->getCascadeOption($relation['reference']->parseComment('cascade')),
                 'fetch'        => $formatter->getFetchOption($relation['reference']->parseComment('fetch')),
             );
-            $relationName = $relation['refTable']->getRawTableName();
+            $relationName = Pluralizer::pluralize($relation['refTable']->getRawTableName());
             // if this is the owning side, also output the JoinTable Annotation
             // otherwise use "mappedBy" feature
             if ($isOwningSide) {
